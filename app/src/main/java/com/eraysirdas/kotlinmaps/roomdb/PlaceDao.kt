@@ -20,5 +20,7 @@ interface PlaceDao {
     @Delete
     fun delete(place : Place) : Completable
 
+    @Query("UPDATE Place SET name = :name, latitude = :latitude, longitude = :longitude WHERE id = :id")
+    fun updatePlace(id: Int, name: String, latitude: Double, longitude: Double): Completable
 
 }

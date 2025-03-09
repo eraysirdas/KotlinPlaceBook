@@ -2,7 +2,6 @@ package com.eraysirdas.kotlinmaps.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -57,7 +56,6 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("info","new")
             startActivity(intent)
         }
-
         return super.onOptionsItemSelected(item)
     }
 }

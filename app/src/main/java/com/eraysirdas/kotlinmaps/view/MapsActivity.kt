@@ -73,8 +73,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMapLong
         placeDao = db.placeDao()
 
         binding.saveBtn.isEnabled=false
-
-
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -86,6 +84,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMapLong
 
         if(info.equals("new")){
             binding.saveBtn.visibility = View.VISIBLE
+            binding.updateBtn.visibility = View.GONE
             binding.deleteBtn.visibility = View.GONE
 
             locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager //casting
@@ -129,10 +128,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMapLong
                 mMap.addMarker(MarkerOptions().position(latLng).title(it.name))
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15f))
 
-
                 binding.placeText.setText(it.name)
                 binding.saveBtn.visibility=View.GONE
                 binding.deleteBtn.visibility=View.VISIBLE
+                binding.updateBtn.visibility=View.VISIBLE
 
             }
         }
@@ -167,6 +166,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMapLong
         selectedLatitude=p0.latitude
         selectedLongitude=p0.longitude
         binding.saveBtn.isEnabled=true
+        binding.deleteBtn.isEnabled=false
     }
 
     fun save(view : View){
@@ -199,6 +199,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,GoogleMap.OnMapLong
                     .subscribe(this::handleResponse)
             )
         }
+    }
+
+    fun update(view : View){
+        placeFromMain?.let {
+            compositeDisposable.add(
+                placeDao.updatePlace(it.id,binding.placeText.text.toString(),selectedLatitude!!,selectedLongitude!!)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(this::handleResponse)
+            )
+        }
+
     }
 
 
